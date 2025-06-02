@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Venta de Galletas - Tu Dulce Favorito</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(120deg, #f9f1e7, #ffe7d1);
+    color: #342e37;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background-color: #ff6f61;
+    color: white;
+    padding: 1.2rem 2rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 5px rgba(0,0,0,0.15);
+    user-select: none;
+  }
+
+  main {
+    flex: 1;
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 2rem;
+  }
+
+  /* Productos */
+  section#products {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 10px 25px rgb(255 111 97 / 0.15);
+    overflow-y: auto;
+    max-height: 75vh;
+  }
+  section#products h2 {
+    margin-bottom: 1rem;
+    color: #d14b39;
+    border-bottom: 2px solid #ff6f61;
+    padding-bottom: 4px;
+    font-size: 1.6rem;
+  }
+
+  .product-card {
+    display: flex;
+    background: #fff0e9;
+    border-radius: 10px;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 3px 7px rgb(190 102 90 / 0.3);
+    transition: transform 0.15s ease-in-out;
+  }
+  .product-card:hover {
+    transform: scale(1.03);
+  }
+  .product-image {
+    width: 120px;
+    height: 120px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    object-fit: cover;
+  }
+  .product-info {
+    padding: 0.8rem 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .product-name {
+    font-weight: 600;
+    font-size: 1.15rem;
+    margin-bottom: 0.3rem;
+    color: #ab3f2b;
+  }
+  .product-desc {
+    font-size: 0.9rem;
+    color: #7a5448;
+    margin-bottom: 0.6rem;
+    line-height: 1.2;
+  }
+  .product-price {
+    font-weight: 700;
+    color: #d3432d;
+    font-size: 1.1rem;
+  }
+  .add-btn {
+    margin-top: 0.5rem;
+    background: #ff755b;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    align-self: flex-start;
+    transition: background-color 0.3s ease;
+  }
+  .add-btn:hover {
+    background: #d14428;
+  }
+
+  /* Carrito y Pago */
+  section#cart-container {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 10px 25px rgb(255 111 97 / 0.15);
+    display: flex;
+    flex-direction: column;
+  }
+
+  #cart-container h2 {
+    color: #d14b39;
+    border-bottom: 2px solid #ff6f61;
+    padding-bottom: 4px;
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+
+  #cart {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 280px;
+    margin-bottom: 1rem;
+  }
+
+  .cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #f0d9cc;
+    padding: 0.5rem 0;
+  }
+  .cart-item-name {
+    font-weight: 600;
+    color: #a03a24;
+    flex: 1;
+  }
+  .cart-item-qty {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .qty-btn {
+    background: #ff755b;
+    color: white;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    line-height: 1;
+    user-select: none;
+    transition: background-color 0.3s ease;
+  }
+  .qty-btn:hover {
+    background: #d14428;
+  }
+  .cart-item-price {
+    font-weight: 700;
+    color: #d3432d;
+    width: 70px;
+    text-align: right;
+  }
+  .remove-btn {
+    background: transparent;
+    border: none;
+    color: #b43825;
+    cursor: pointer;
+    font-weight: 600;
+    margin-left: 8px;
+    font-size: 1.1rem;
+    transition: color 0.2s ease;
+  }
+  .remove-btn:hover {
+    color: #6a1506;
+  }
+  #total {
+    text-align: right;
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-top: 0.8rem;
+    color: #bb3b25;
+  }
+
+  /* Formulario */
+  form {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+  form label {
+    font-weight: 600;
+    color: #8a4a3c;
+    font-size: 0.95rem;
+  }
+  form input, form select {
+    padding: 10px 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1.8px solid #e3c7b1;
+    outline-offset: 2px;
+    outline-color: transparent;
+    transition: outline-color 0.2s ease;
+  }
+  form input:focus, form select:focus {
+    outline-color: #ff6f61;
+    border-color: #ff6f61;
+  }
+  form button {
+    margin-top: 1.2rem;
+    background: #ff6f61;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 14px 0;
+    border-radius: 10px;
+    font-size: 1.15rem;
+    cursor: pointer;
+    box-shadow: 0 7px 16px rgba(255 111 97 / 0.6);
+    transition: background-color 0.3s ease;
+  }
+  form button:hover {
+    background: #d14428;
+  }
+
+  /* Responsive */
+  @media(max-width: 960px) {
+    main {
+      grid-template-columns: 1fr;
+    }
+    section#cart-container {
+      max-height: none;
+      margin-top: 2rem;
+    }
+    section#products {
+      max-height: none;
+    }
+  }
+
+  /* Scrollbar minimal styles */
+  #cart::-webkit-scrollbar, #products::-webkit-scrollbar {
+    width: 6px;
+  }
+  #cart::-webkit-scrollbar-thumb, #products::-webkit-scrollbar-thumb {
+    background-color: #ff6f61aa;
+    border-radius: 10px;
+  }
+</style>
+</head>
+<body>
+<header>Venta de Galletas - Dulces Momentos</header>
+<main>
+  <section id="products">
+    <h2>Productos</h2>
+    <div class="product-card" data-id="1" data-name="Galletas de Chocolate" data-price="3.50">
+      <img src="https://images.unsplash.com/photo-1600267163383-4e8aecdf6eca?auto=format&fit=crop&w=150&q=80" alt="Galletas de Chocolate" class="product-image" />
+      <div class="product-info">
+        <div>
+          <div class="product-name">Galletas de Chocolate</div>
+          <div class="product-desc">Deliciosas galletas hechas con cacao puro y chips de chocolate.</div>
+        </div>
+        <div>
+          <div class="product-price">$3.50 USD</div>
+          <button class="add-btn" type="button">Agregar</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card" data-id="2" data-name="Galletas de Avena" data-price="2.75">
+      <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=150&q=80" alt="Galletas de Avena" class="product-image" />
+      <div class="product-info">
+        <div>
+          <div class="product-name">Galletas de Avena</div>
+          <div class="product-desc">Crujientes galletas con avena integral y miel natural.</div>
+        </div>
+        <div>
+          <div class="product-price">$2.75 USD</div>
+          <button class="add-btn" type="button">Agregar</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card" data-id="3" data-name="Galletas de Almendra" data-price="4.20">
+      <img src="https://images.unsplash.com/photo-1621089517590-8cd5d55f502c?auto=format&fit=crop&w=150&q=80" alt="Galletas de Almendra" class="product-image" />
+      <div class="product-info">
+        <div>
+          <div class="product-name">Galletas de Almendra</div>
+          <div class="product-desc">Galletas delicadas con trozos de almendra tostada y vainilla.</div>
+        </div>
+        <div>
+          <div class="product-price">$4.20 USD</div>
+          <button class="add-btn" type="button">Agregar</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card" data-id="4" data-name="Galletas de Mantequilla" data-price="3.00">
+      <img src="https://images.unsplash.com/photo-1576765607924-5e5fc9eb1a87?auto=format&fit=crop&w=150&q=80" alt="Galletas de Mantequilla" class="product-image" />
+      <div class="product-info">
+        <div>
+          <div class="product-name">Galletas de Mantequilla</div>
+          <div class="product-desc">Clásicas galletas suaves con sabor intenso a mantequilla.</div>
+        </div>
+        <div>
+          <div class="product-price">$3.00 USD</div>
+          <button class="add-btn" type="button">Agregar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cart-container">
+    <h2>Tu carrito</h2>
+    <div id="cart">
+      <!-- Items agregados aparecerán aquí -->
+      <p id="empty-cart-msg" style="color:#a36d58; font-style:italic;">Tu carrito está vacío.</p>
+    </div>
+    <div id="total">Total: $0.00</div>
+
+    <form id="checkout-form" action="https://formspree.io/f/mrbkgldq" method="POST">
+      <h2>Datos de pago</h2>
+      <label for="name">Nombre Completo</label>
+      <input type="text" name="name" id="name" required placeholder="Ej. Juan Pérez" autocomplete="name" />
+      
+      <label for="email">Correo Electrónico</label>
+      <input type="email" name="_replyto" id="email" required placeholder="ejemplo@mail.com" autocomplete="email" />
+      
+      <label for="cardnum">Número de Tarjeta</label>
+      <input type="text" name="card_number" id="cardnum" required placeholder="1234 5678 1234 5678" inputmode="numeric" pattern="[0-9\s]{13,19}" maxlength="19" />
+
+      <label for="expiry">Fecha de Expiración (MM/AA)</label>
+      <input type="text" name="expiry_date" id="expiry" required placeholder="MM/AA" pattern="(0[1-9]|1[0-2])\/?([0-9]{2})" maxlength="5" inputmode="numeric" />
+
+      <label for="cvv">CVV</label>
+      <input type="text" name="cvv" id="cvv" required placeholder="123" pattern="\d{3,4}" maxlength="4" inputmode="numeric" />
+
+      <label for="address">Dirección de Envío</label>
+      <input type="text" name="shipping_address" id="address" placeholder="Calle, Número, Ciudad, Estado" autocomplete="shipping street-address" />
+
+      <label for="order-summary">Resumen del pedido (automático)</label>
+      <textarea id="order-summary" name="order_summary" readonly style="background:#f2ebe5; border:none; resize:none; padding:8px; font-family: 'Poppins', sans-serif;"></textarea>
+
+      <button type="submit" id="submit-btn" disabled>Pagar ahora</button>
+    </form>
+  </section>
+</main>
+
+<script>
+  // Variables globales y referencias
+  const addButtons = document.querySelectorAll('.add-btn');
+  const cartContainer = document.getElementById('cart');
+  const totalDisplay = document.getElementById('total');
+  const emptyMsg = document.getElementById('empty-cart-msg');
+  const form = document.getElementById('checkout-form');
+  const orderSummary = document.getElementById('order-summary');
+  const submitBtn = document.getElementById('submit-btn');
+
+  // Estado carrito: {id: {id, name, price, qty}}
+  let cart = {};
+
+  // Formspree necesita inputs con 'name', ya puestos en el form
+
+  // Función para actualizar la visualización del carrito
+  function renderCart() {
+    cartContainer.innerHTML = '';
+    const items = Object.values(cart);
+    if (items.length === 0) {
+      emptyMsg.style.display = 'block';
+      submitBtn.disabled = true;
+      orderSummary.value = '';
+      totalDisplay.textContent = `Total: $0.00`;
+      return;
+    }
+    emptyMsg.style.display = 'none';
+    submitBtn.disabled = false;
+
+    items.forEach(item => {
+      // Crear contenedor item
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+
+      // Nombre producto
+      const name = document.createElement('div');
+      name.className = 'cart-item-name';
+      name.textContent = item.name;
+
+      // Cantidad con botones
+      const qtyControl = document.createElement('div');
+      qtyControl.className = 'cart-item-qty';
+      const btnMinus = document.createElement('button');
+      btnMinus.type = 'button';
+      btnMinus.className = 'qty-btn';
+      btnMinus.textContent = '−';
+      btnMinus.title = 'Disminuir cantidad';
+      btnMinus.onclick = () => changeQty(item.id, item.qty - 1);
+
+      const qtyText = document.createElement('span');
+      qtyText.textContent = item.qty;
+
+      const btnPlus = document.createElement('button');
+      btnPlus.type = 'button';
+      btnPlus.className = 'qty-btn';
+      btnPlus.textContent = '+';
+      btnPlus.title = 'Aumentar cantidad';
+      btnPlus.onclick = () => changeQty(item.id, item.qty + 1);
+
+      qtyControl.appendChild(btnMinus);
+      qtyControl.appendChild(qtyText);
+      qtyControl.appendChild(btnPlus);
+
+      // Precio total por item
+      const price = document.createElement('div');
+      price.className = 'cart-item-price';
+      const itemTotal = item.price * item.qty;
+      price.textContent = `$${itemTotal.toFixed(2)}`;
+
+      // Botón eliminar
+      const btnRemove = document.createElement('button');
+      btnRemove.type = 'button';
+      btnRemove.className = 'remove-btn';
+      btnRemove.title = 'Eliminar producto';
+      btnRemove.textContent = '×';
+      btnRemove.onclick = () => removeItem(item.id);
+
+      div.appendChild(name);
+      div.appendChild(qtyControl);
+      div.appendChild(price);
+      div.appendChild(btnRemove);
+
+      cartContainer.appendChild(div);
+    });
+
+    const total = items.reduce((acc, cur) => acc + cur.price * cur.qty, 0);
+    totalDisplay.textContent = `Total: $${total.toFixed(2)}`;
+
+    // Actualizar resumen automático
+    updateOrderSummary();
+  }
+
+  // Añadir producto al carrito
+  function addItem(id, name, price) {
+    if (cart[id]) {
+      cart[id].qty++;
+    } else {
+      cart[id] = {id, name, price, qty: 1};
+    }
+    renderCart();
+  }
+
+  // Cambiar cantidad
+  function changeQty(id, newQty) {
+    if (newQty < 1) {
+      removeItem(id);
+      return;
+    }
+    cart[id].qty = newQty;
+    renderCart();
+  }
+
+  // Eliminar producto
+  function removeItem(id) {
+    delete cart[id];
+    renderCart();
+  }
+
+  // Actualizar el campo resumen del pedido
+  function updateOrderSummary() {
+    const lines = Object.values(cart).map(item =>
+      `${item.qty} × ${item.name}  = $${(item.price * item.qty).toFixed(2)}`
+    );
+    const total = Object.values(cart).reduce((acc, cur) => acc + cur.price * cur.qty, 0);
+    orderSummary.value = lines.join('\n') + `\n\nTOTAL: $${total.toFixed(2)}`;
+  }
+
+  // Validación sencilla para formato de tarjeta y fecha
+  function validateCardInputs() {
+    const cardNum = form.card_number.value.replace(/\s+/g, '');
+    const exp = form.expiry_date.value;
+    const cvv = form.cvv.value;
+
+    const cardNumValid = /^\d{13,19}$/.test(cardNum);
+    const expValid = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/.test(exp);
+    const cvvValid = /^\d{3,4}$/.test(cvv);
+
+    return cardNumValid && expValid && cvvValid;
+  }
+
+  // Espacio para agregar espacios al número de tarjeta cada 4 dígitos
+  function formatCardNumber(value) {
+    return value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
+  }
+
+  // Eventos para inputs de la tarjeta
+  form.card_number.addEventListener('input', (e) => {
+    e.target.value = formatCardNumber(e.target.value);
+  });
+
+  // Control enviar solo si hay productos y forma válida
+  form.addEventListener('input', () => {
+    const hasItems = Object.keys(cart).length > 0;
+    const cardValid = validateCardInputs();
+    submitBtn.disabled = !(hasItems && cardValid);
+  });
+
+  // Al enviar el formulario limpiamos carrito y mostramos agradecimiento básico
+  form.addEventListener('submit', (e) => {
+    e.preventDefault(); // Prevenir envío real para demo
+
+    // Para usar Formspree real, comentar la línea e ir con submit normal o ajax fetch
+
+    // VALIDAR que haya productos
+    if (Object.keys(cart).length === 0) {
+      alert('Por favor agrega productos al carrito antes de pagar.');
+      return;
+    }
+    if (!validateCardInputs()) {
+      alert('Datos de tarjeta inválidos, verifica e intenta de nuevo.');
+      return;
+    }
+
+    // Enviar con fetch para Formspree
+    const data = new FormData(form);
+    fetch(form.action, {
+      method: 'POST',
+      body: data,
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).then(response => {
+      if (response.ok) {
+        alert('Gracias por tu compra! Hemos recibido tu pedido.');
+        cart = {};
+        renderCart();
+        form.reset();
+        submitBtn.disabled = true;
+        orderSummary.value = '';
+      } else {
+        alert('Hubo un error al enviar el pedido, intenta más tarde.');
+      }
+    }).catch(() => {
+      alert('Hubo un error de conexión al enviar el pedido.');
+    });
+  });
+
+  // Botones Agregar
+  addButtons.forEach(btn => {
+    btn.addEventListener('click', e => {
+      const card = e.target.closest('.product-card');
+      const id = card.getAttribute('data-id');
+      const name = card.getAttribute('data-name');
+      const price = parseFloat(card.getAttribute('data-price'));
+      addItem(id, name, price);
+    });
+  });
+
+  // Inicializar carrito vacío
+  renderCart();
+</script>
+</body>
+</html>
+
